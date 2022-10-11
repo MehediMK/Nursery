@@ -1,0 +1,155 @@
+{% extends '../base.html' %}
+{% load cart %}
+
+
+{% block 'title' %}Cart List{% endblock %}
+
+{% block 'content' %}
+<!-- navbar added here -->
+{% include 'product/navbar.html' %}
+
+
+<div class="container">
+
+  <div class="border rounded p-4 m-3">
+    <h1 class='text-center'>Cart List</h1>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Sno.</th>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Total Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+    {% for plant in plants %}
+        <tr>          
+          <td>{{ forloop.counter }}</td>
+          <td>
+            <img src="{{ plant.pimage.url }}" width="100px" height="100px" alt="">
+          </td>
+          <td>{{ plant.pname}}</td>
+          <td>{{ plant.pprice|currency }}</td>
+          <td>
+            <form action="{% url 'incdec' %}" class="col-3 p-0 btn btn-success" method="post">
+              {% csrf_token %}
+              <input type="text" hidden name="productid" value="{{plant.id}}" id="">
+              <input type="text" hidden name="remove" value="True" id="">
+              <input type="submit" class='m-0 btn btn-success ' value="-">
+          </form>
+            {{ plant|cart_quantity:request.session.cart}}
+            <form action="{% url 'incdec' %}" class="col-3 p-0 btn btn-success" method="post">
+              {% csrf_token %}
+              <input type="text" hidden name="productid" value="{{plant.id}}" id="">
+              <input type="submit" class='btn btn-success' value="+">
+          </form>
+          </td>
+          <td>{{ plant|price_total:request.session.cart|currency  }}</td>
+        </tr>
+    {% endfor %}
+        
+      </tbody>
+      <tfoot>
+        <tr>
+          <td  colspan="5"></td>
+          <td>Total</td>        
+          <td>= {{ plants|total_cart_price:request.session.cart|currency }}</td>
+        </tr>
+      </tfoot>
+    </table>
+    <div class="p-3 m-3">
+    {% if request.user.is_authenticated %}   
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Check Out
+      </button>
+      {% else %}
+      <a href="{% url 'login' %}" class="btn btn-info float-right btn btn-primary">Login</a>
+      {% endif %}
+    </div>
+   
+  </div>
+   
+</div>
+
+
+<!-- Button trigger modal -->
+{% if request.user.is_authenticated %}  
+
+<!-- Modal start-->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="p-1 m-1">
+          <div class="payment">
+            <p class="text-center">*Make your payment in this number through any bKash Customer Wallet <br><small><a href="#paymentinst">payment instruction</a></small></p>
+            <hr>
+            <h4 class="text-center">Amount of Taka = {{ plants|total_cart_price:request.session.cart|currency }}</h4>
+            <hr>
+            <h4 class="text-center text-success"><small class="text-danger">Merchant bKash No:</small>+880 1610-****49</h4><hr>
+          </div>
+          <form action="{% url 'checkout' %}" method="POST">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="bkashtrxid">Enter bKash TrxID:<span class="text-danger">*</span> </label>
+            <input type="text" name="bkashtrxid" id="bkashtrxid" class="form-control" placeholder="bKash TrxID:" required>
+          </div>
+          <div class="form-group">
+            <label for="address">Address:<span class="text-danger">*</span></label>
+            <input type="text" name="address" id="address" class="form-control" placeholder="Motijheel,Dhaka" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone No:<span class="text-danger">*</span></label>
+            <input type="text" name="phone" id="phone" class="form-control" placeholder="018******" required>
+          </div>
+            <input type="submit" class="btn btn-info float-right" value="Check Out">
+          </form>
+          <div class="paymentinst" id="paymentinst">
+            <hr><br><br>
+            <h5 class="text-waring">***How to Make Payment with bKash:</h5><hr>
+            <ol>
+              <li>Go to your bkash Mobile Menu by dialing *247#</li>
+              <li>Choose "Payment"</li>
+              <li>Enter the Merchant bKash Wallet No: +8801610****49</li>
+              <li>Enter the Amount: {{ plants|total_cart_price:request.session.cart|currency }}</li>
+              <li>Enter Reference: {{ request.user.username }}{{ plants|total_cart_price:request.session.cart }}</li>
+              <li>Enter the Counter Number: 123</li>
+              <li>Now enter your bkash Menu PIN to Confirm</li>
+              <li>Done! you will receive a confirmation message from bKash</li>
+              <li>Put the Transaction ID in the Upper box and press "Checkout"</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+{% endif %}
+
+<!-- end model -->
+
+
+<!-- footer area start  -->
+{% include 'product/footer.html' %}
+<!-- footer area end -->
+
+{% endblock %}
+
+

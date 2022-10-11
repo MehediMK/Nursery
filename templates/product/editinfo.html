@@ -1,0 +1,36 @@
+{% extends '../base.html' %}
+{% load cart %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block 'title' %}
+Edit info
+{% endblock %}
+
+
+{% block 'content' %}
+
+<!-- navbar added here -->
+{% include 'product/navbar.html' %}
+
+<div class="container">
+    <div class="row m-3">
+<h1 class="text-center">Edit info Page</h1>
+        <div class="border offset-3 col-md-6 border-success">
+            <img src="{{ userinfo.profile_pic.url }}" style="padding:10px;width:100px;height:100px;"alt="">
+            <form method="post" action="{% url 'editUserInfo' %}" class="m-3" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+                {{ form1|crispy }}
+                <input type="submit" class="btn btn-success m-3 w-100 mx-auto" value="Edit Now">
+            
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- footer area start  -->
+{% include 'product/footer.html' %}
+<!-- footer area end -->
+
+{% endblock %}

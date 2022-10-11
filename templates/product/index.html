@@ -1,0 +1,88 @@
+{% extends '../base.html' %}
+{% load cart %}
+
+{% block 'title' %}Home Page{% endblock %}
+
+{% block 'content' %}
+<!-- navbar added here -->
+{% include 'product/navbar.html' %}
+
+
+{% if carousels %}
+<!-- Carousel wrapper -->
+{% include 'product/carousel.html' %}
+<!-- Carousel wrapper -->
+{% endif %}
+
+<!-- product list here -->
+<div class="container">
+    <h2>Plant's List</h2>
+    <hr>
+    <div class="row">
+        {% for plant in plants %}
+        <div class="col-md-3 col-sm-4 p-3">
+                 <!-- demo card start  -->
+            <div class="card" id="plant{{ plant.id }}">
+                
+                <img src="{{ plant.pimage.url }}" class="card-img-top" alt="{{plant.pname}}" style="height:200px;" />
+                <div class="card-body">            
+                  <div class="d-flex justify-content-between ">
+                    <h6 class="mb-0">{{plant.pname}}</h6>
+                    <b class="text-dark mb-0">${{plant.pprice}}</b>
+                  </div> 
+                  <hr>
+                  {% if plant.ptype %}
+                  <div class="d-flex justify-content-between">
+                    <h6 class="mb-0">Season Type:</h6>
+                    <p class="text-dark mb-0">{{plant.ptype}}</p>
+                  </div>  
+                  {% endif %} 
+                  {% if plant.pwatersc %}
+                  <div class="d-flex justify-content-between">
+                    <h6 class="mb-0">Water Schedule:</h6>
+                    <p class="text-dark mb-0">{{plant.pwatersc}}</p>
+                  </div>  
+                  {% endif %}
+
+                                    
+                  {% if plant|is_in_cart:request.session.cart %}
+                        <div class="row p-1">
+                                    <input hidden type="text" name="plant" value="{{plant.id}}">
+                            <form action="{% url 'addtocard' %}#plant{{plant.id}}" class="col-3 " method="post"> {% csrf_token %}
+                                <input hidden type="text" name="plant" value="{{plant.id}}">
+                                <input hidden type="text" name="remove" value="True">
+                                <input class="btn btn-secondary" type="submit" value=" - ">
+                            </form>
+
+                            <div class="col text-center">{{plant|cart_quantity:request.session.cart}}</div>
+                            
+                            <form action="{% url 'addtocard' %}#plant{{plant.id}}" class="col-3 " method="post"> {% csrf_token %}
+                                <input hidden type="text" name="plant" value="{{plant.id}}">
+                                <input class="btn btn-secondary" type="submit" value=" + ">
+                            </form>
+                        </div>
+                        {% else %}
+                        <div class="row p-1">
+                            <div class="col">
+                                <form class="form-group" action="{% url 'addtocard' %}#plant{{plant.id}}" method="post">
+                                    {% csrf_token %}
+                                    <input hidden type="text" name="plant" value="{{plant.id}}">
+                                    <input class="btn btn-sm btn-warning w-100" type="submit" value="Add to cart">
+                                </form> 
+                            </div>
+                        </div>
+                        {% endif %}
+                </div>
+              </div>
+            <!-- demo card end -->            
+        </div>
+        {% endfor %}           
+    </div>
+</div>
+
+<!-- footer area start  -->
+{% include 'product/footer.html' %}
+<!-- footer area end -->
+{% endblock %}
+
+

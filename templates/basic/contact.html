@@ -1,0 +1,63 @@
+{% extends '../base.html' %}
+{% load cart %}
+
+
+{% block 'title' %}
+Contact Us Page
+{% endblock %}
+
+{% block 'content' %}
+
+<!-- navbar added here -->
+{% include 'product/navbar.html' %}
+
+
+<div class="container">
+<div class="row">
+    <div class="col-6 offset-3 p-3 my-3 border rounded">
+        <h3 class="text-center py-2">Contact Form</h3>
+        <form action="" method="post">
+            {% csrf_token %}
+        <!-- 2 column grid layout with text inputs for the first and last names -->
+        <div class="row mb-4">
+            <div class="col">            
+            <div class="form-floating">
+                <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name" required>
+                <label for="fname">First Name</label>
+            </div>
+            </div>
+            <div class="col">            
+            <div class="form-floating">
+                <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name" required>
+                <label for="lname">Last Name</label>
+            </div>
+            </div>
+        </div>
+        
+        <!-- Email input -->
+        
+        <div class="form-floating mb-4">
+            <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+            <label for="email">Email address</label>
+        </div>
+        
+        <!-- Message input -->
+        
+        <div class="form-floating mb-4">
+            <textarea class="form-control" placeholder="Leave a comment here"  name="message"  id="message" style="height: 100px" required></textarea>           
+            <label for="message">Enter your Message</label>
+        </div>
+        
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-primary btn-block mb-4">Submit</button>        
+        
+        </form>
+    </div>
+</div>  
+</div>
+
+<!-- footer area start  -->
+{% include 'product/footer.html' %}
+<!-- footer area end -->
+
+{% endblock %}

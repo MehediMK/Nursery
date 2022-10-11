@@ -1,0 +1,46 @@
+{% extends '../base.html' %}
+{% load static %}
+{% load cart %}
+
+    
+{% block 'csslinks' %}
+    <!-- Main css file -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+{% endblock %}
+
+{% block 'title' %}
+About Us
+{% endblock %}
+
+{% block 'content' %}
+
+<!-- navbar added here -->
+{% include 'product/navbar.html' %}
+
+<section class="abouthead">
+<div class="container-fluid p-1">
+    <div class="jumbotron jumbotron-fluid" style="background-image:url({% static 'img/banner.jpg' %}); background-repeat:no-repeat;background-size: cover;">
+        <div class="container">
+          <h1 class="display-4 text-center text-info">About Us</h1>
+          <p class="lead text-warning text-center">“Chadbagan Dunia - An e-commerce platform for garden plants shopping”.</p>
+        </div>
+    </div>    
+</div>
+<div class="container">
+    <div class="row p-5">
+        <div class="col-md-5"><img class="img-thumbnai rounded w-100 " src="{% static 'img/flower.jpg' %}" alt=""></div>
+        <div class="col-7 p-3">“The main reason of doing this project is for my startup business platform and also
+            learning for web development works. Basically I’m very much interested in web
+            development with python that why I choose this project. <br> If I’m able to complete this
+            project then it will give me more confidence and opportunities for my future work. Also
+            e-commerce is a platform where I will learn about the customers need, complain and
+            many more. This project is not only going to give me for learning, it also going to teach
+            me about recent market places.”</div>
+    </div>
+</div>
+</section>
+<!-- footer area start  -->
+{% include 'product/footer.html' %}
+<!-- footer area end -->
+
+{% endblock %}

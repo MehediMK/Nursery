@@ -1,0 +1,4 @@
+
+.abouthead{
+    background-image: url({% static 'img/flower.jpg' %});
+}

@@ -1,0 +1,86 @@
+{% extends '../base.html' %}
+{% load cart %}
+{% load static %}
+
+{% block 'title' %}Profile{% endblock %}
+
+{% block 'content' %}
+
+<!-- navbar added here -->
+{% include 'product/navbar.html' %}
+
+<div class="container">
+    <div class="row mt-3">
+        <h1 class='text-center'>User Profile</h1>
+        <hr>
+        <div class="col-md-3 mx-auto border p-2">
+            {% if profile.profile_pic %}
+            <img class='d-block mx-auto img-thumbnail' src="{{ profile.profile_pic.url }}" alt="">
+            {% else %}
+            <img class='d-block mx-auto img-thumbnail' src="{% static 'image/demoprofile.png' %}" alt="">
+            {% endif %}
+            <p>Name: {{ user.first_name}} {{ user.last_name }}</p>
+            <p>Email: {{ user.email }}</p>
+            <p>Gender: {{profile.get_gender_display}}</p>
+            <p>Address: {{profile.address}}</p>
+            <p>Phone No: {{profile.phone}}</p>
+            <a href="{% url 'editUserInfo' %}" class="btn btn-success w-100">Edit</a>
+        </div>
+        <div class="col-md-8">
+            <h4 class="text-center">User Details</h4>
+            <div class="row">
+                                
+                <div class="border rounded p-4 m-3">
+                    <h1 class='text-center'>Your Orders</h1>
+                    <table class="table">
+                    <thead>
+                        <tr>
+                        <th>Sno.</th>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total Price</th>
+                        <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    {% for order in orders %}
+                        <tr>          
+                        <td>{{ forloop.counter }}</td>
+                        <td><img src="{{ order.plant.pimage.url }}" width="100px" height="100px" alt=""></td>
+                        <td>{{ order.plant.pname}}</td>
+                        <td>{{ order.date}}</td>
+                        <td>{{ order.price|currency }}</td>
+                        <td>{{ order.quantity}}</td>
+                        <td>{{ order.quantity|multiply:order.price|currency }}</td>
+                        
+                        {% if order.status %}
+                        <td><small class="badge badge-success p-3 text-success">Completed</small></td>
+                        {% else %}
+                        <td><small class="badge badge-danger p-3 text-danger">Pending</small></td>
+                        {% endif %}
+                        </tr>
+                    {% endfor %}
+                        
+                    </tbody>
+                    
+                    </table>
+
+                
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<!-- footer area start  -->
+{% include 'product/footer.html' %}
+<!-- footer area end -->
+
+{% endblock %}
