@@ -4,3 +4,7 @@ __pycache__
 migrations
 db.sqlite3
 config.py
+
+#ignore environment
+env
+venv
